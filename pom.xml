@@ -18,7 +18,7 @@
     <!-- Encoding -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-  
+
   <repositories>
     <repository>
       <id>MVN Repo</id>
@@ -30,10 +30,11 @@
       <url>http://mvnrepository.com/artifact/</url>
     </repository>
   </repositories>
-  
+
   <modules>
-    <!--module>Remote</module-->
+    <!--module>Remote</module -->
     <module>Server</module>
+    <module>Remote</module>
   </modules>
 
   <build>
@@ -75,6 +76,12 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
+          <version>2.6</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-war-plugin</artifactId>
+          <!-- previous version: 2.4 -->
           <version>2.6</version>
         </plugin>
         <plugin>
@@ -144,6 +151,25 @@
               <Maven-Artifact-Id>${project.artifactId}</Maven-Artifact-Id>
               <Specification-Version>1.0.0</Specification-Version>
               <Build-Time>${maven.build.timestamp}</Build-Time>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+
+      <!-- Configuration of war plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Implementation-Title>${project.name}</Implementation-Title>
+              <Implementation-Version>${project.version}</Implementation-Version>
+              <Maven-Group-Id>${project.groupId}</Maven-Group-Id>
+              <Maven-Artifact-Id>${project.artifactId}</Maven-Artifact-Id>
+              <Specification-Version>1.0.0</Specification-Version>
+              <Build-Time>${maven.build.timestamp}</Build-Time>
+              <Compile-Jdk>${jdkVersion}</Compile-Jdk>
             </manifestEntries>
           </archive>
         </configuration>
