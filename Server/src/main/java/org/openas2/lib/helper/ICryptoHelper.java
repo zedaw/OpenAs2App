@@ -10,6 +10,7 @@ import javax.mail.internet.MimeBodyPart;
 import org.bouncycastle.mail.smime.SMIMEException;
 import org.openas2.DispositionException;
 import org.openas2.OpenAS2Exception;
+import org.openas2.cert.KeyStoreType;
 import org.openas2.message.AS2Message;
 import org.openas2.message.Message;
 
@@ -38,11 +39,16 @@ public interface ICryptoHelper {
 
     boolean isEncrypted(MimeBodyPart part) throws Exception;
 
-    KeyStore getKeyStore() throws Exception;
+	/**
+     * @param filename
+     * @return
+     * @throws Exception 
+     */
+    KeyStore getKeyStore(KeyStoreType keyStoreType) throws Exception;
+    
+    KeyStore loadKeyStore(KeyStoreType keyStoreType, InputStream in, char[] password) throws Exception;
 
-    KeyStore loadKeyStore(InputStream in, char[] password) throws Exception;
-
-    KeyStore loadKeyStore(String filename, char[] password) throws Exception;
+    KeyStore loadKeyStore(KeyStoreType keyStoreType, String filename, char[] password) throws Exception;
 
     boolean isSigned(MimeBodyPart part) throws Exception;
 

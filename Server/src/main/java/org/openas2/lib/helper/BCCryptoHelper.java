@@ -10,10 +10,8 @@ import java.security.DigestInputStream;
 import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.security.KeyStore;
-import java.security.KeyStoreException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.Security;
 import java.security.SignatureException;
@@ -83,6 +81,7 @@ import org.bouncycastle.util.encoders.Base64;
 import org.openas2.DispositionException;
 import org.openas2.OpenAS2Exception;
 import org.openas2.Session;
+import org.openas2.cert.KeyStoreType;
 import org.openas2.lib.util.IOUtil;
 import org.openas2.message.AS2Message;
 import org.openas2.message.Message;
@@ -90,7 +89,7 @@ import org.openas2.processor.receiver.AS2ReceiverModule;
 import org.openas2.util.DispositionType;
 
 public class BCCryptoHelper implements ICryptoHelper {
-	private Log logger = LogFactory.getLog(BCCryptoHelper.class.getSimpleName());
+    private Log logger = LogFactory.getLog(BCCryptoHelper.class.getSimpleName());
 
     public boolean isEncrypted(MimeBodyPart part) throws MessagingException {
         ContentType contentType = new ContentType(part.getContentType());
@@ -159,7 +158,8 @@ public class BCCryptoHelper implements ICryptoHelper {
 
         if (includeHeaders && logger.isTraceEnabled()) {
         	String headers = "";
-        	Enumeration<Header> headersEnum = part.getAllHeaders();
+        	@SuppressWarnings("unchecked")
+            Enumeration<Header> headersEnum = part.getAllHeaders();
         	while (headersEnum.hasMoreElements())
 			{
 				Header hd = headersEnum.nextElement();
@@ -269,6 +269,7 @@ public class BCCryptoHelper implements ICryptoHelper {
     public void deinitialize() {
     }
 
+    @SuppressWarnings("unchecked")
     public MimeBodyPart encrypt(MimeBodyPart part, Certificate cert, String algorithm, String contentTxfrEncoding)
             throws GeneralSecurityException, SMIMEException, MessagingException {
         X509Certificate x509Cert = castCertificate(cert);
@@ -295,9 +296,6 @@ public class BCCryptoHelper implements ICryptoHelper {
 
         MimeBodyPart encData = gen.generate(part, getOutputEncryptor(algorithm));
         
-        //TODO: Check if this gc call makes sense
-        System.gc();
-
         return encData;
     }
 
@@ -313,6 +311,7 @@ public class BCCryptoHelper implements ICryptoHelper {
         CommandMap.setDefaultCommandMap(mc);
     }
 
+    @SuppressWarnings("unchecked")
     public MimeBodyPart sign(MimeBodyPart part, Certificate cert, Key key, String digest, String contentTxfrEncoding
     				, boolean adjustDigestToOldName, boolean isRemoveCmsAlgorithmProtectionAttr)
             throws GeneralSecurityException, SMIMEException, MessagingException {
@@ -377,6 +376,7 @@ public class BCCryptoHelper implements ICryptoHelper {
         return tmpBody;
     }
 
+    @SuppressWarnings("unchecked")
     public MimeBodyPart verifySignature(MimeBodyPart part, Certificate cert)
             throws GeneralSecurityException, IOException, MessagingException, CMSException, OperatorCreationException {
         // Make sure the data is signed
@@ -704,22 +704,18 @@ public class BCCryptoHelper implements ICryptoHelper {
 
         return bIn;
     }
-
-    public KeyStore getKeyStore() throws KeyStoreException, NoSuchProviderException {
-        return KeyStore.getInstance("PKCS12", "BC");
-    }
-
-    public KeyStore loadKeyStore(InputStream in, char[] password) throws Exception {
-        KeyStore ks = getKeyStore();
+    
+    public KeyStore loadKeyStore(KeyStoreType keyStoreType, InputStream in, char[] password) throws Exception {
+        KeyStore ks = getKeyStore(keyStoreType);
         ks.load(in, password);
         return ks;
     }
 
-    public KeyStore loadKeyStore(String filename, char[] password) throws Exception {
+    public KeyStore loadKeyStore(KeyStoreType keyStoreType, String filename, char[] password) throws Exception {
         FileInputStream fIn = new FileInputStream(filename);
 
         try {
-            return loadKeyStore(fIn, password);
+            return loadKeyStore(keyStoreType, fIn, password);
         } finally {
             fIn.close();
         }
@@ -771,4 +767,17 @@ public class BCCryptoHelper implements ICryptoHelper {
 			}
         }
     }
+
+    
+    @Override
+    public KeyStore getKeyStore(KeyStoreType keyStoreType) throws Exception {
+        if (KeyStoreType.JKS.equals(keyStoreType)) {
+            return KeyStore.getInstance("JKS");
+        }
+        if (KeyStoreType.PKCS12.equals(keyStoreType)) {
+            return KeyStore.getInstance("PKCS12", "BC");
+        }
+        return null;
+    }
+    
 }

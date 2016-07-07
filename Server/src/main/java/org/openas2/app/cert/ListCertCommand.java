@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.openas2.OpenAS2Exception;
-import org.openas2.cert.AliasedCertificateFactory;
+import org.openas2.cert.BaseCertificateFactory;
 import org.openas2.cmd.CommandResult;
 
 public class ListCertCommand extends AliasedCertCommand {
@@ -21,7 +21,7 @@ public class ListCertCommand extends AliasedCertCommand {
 		return "list";
 	}
 
-	public CommandResult execute(AliasedCertificateFactory certFx,
+	public CommandResult execute(BaseCertificateFactory certFx,
 			Object[] params) throws OpenAS2Exception {
 		synchronized (certFx) {
 			Map<String, X509Certificate> certs = certFx.getCertificates();

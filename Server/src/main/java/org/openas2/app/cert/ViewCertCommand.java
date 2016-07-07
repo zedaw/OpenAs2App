@@ -3,7 +3,7 @@ package org.openas2.app.cert;
 import java.security.cert.Certificate;
 
 import org.openas2.OpenAS2Exception;
-import org.openas2.cert.AliasedCertificateFactory;
+import org.openas2.cert.BaseCertificateFactory;
 import org.openas2.cmd.CommandResult;
 
 /**
@@ -24,7 +24,7 @@ public class ViewCertCommand extends AliasedCertCommand {
 		return "view <alias>";
 	}
 
-	protected CommandResult execute(AliasedCertificateFactory certFx,
+	protected CommandResult execute(BaseCertificateFactory certFx,
 			Object[] params) throws OpenAS2Exception {
 		if (params.length < 1) {
 			return new CommandResult(CommandResult.TYPE_INVALID_PARAM_COUNT,

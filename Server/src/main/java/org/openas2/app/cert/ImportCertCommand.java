@@ -12,7 +12,7 @@ import java.util.Enumeration;
 
 import org.openas2.OpenAS2Exception;
 import org.openas2.WrappedException;
-import org.openas2.cert.AliasedCertificateFactory;
+import org.openas2.cert.BaseCertificateFactory;
 import org.openas2.cmd.CommandResult;
 import org.openas2.util.AS2Util;
 
@@ -29,7 +29,7 @@ public class ImportCertCommand extends AliasedCertCommand {
 		return "import <alias> <filename> [<password>]";
 	}
 
-	public CommandResult execute(AliasedCertificateFactory certFx,
+	public CommandResult execute(BaseCertificateFactory certFx,
 			Object[] params) throws OpenAS2Exception {
 		if (params.length < 2) {
 			return new CommandResult(CommandResult.TYPE_INVALID_PARAM_COUNT,
@@ -63,7 +63,7 @@ public class ImportCertCommand extends AliasedCertCommand {
 		}
 	}
 
-	protected CommandResult importCert(AliasedCertificateFactory certFx,
+	protected CommandResult importCert(BaseCertificateFactory certFx,
 			String alias, String filename) throws IOException,
 			CertificateException, OpenAS2Exception {
 		FileInputStream fis = new FileInputStream(filename);
@@ -91,9 +91,9 @@ public class ImportCertCommand extends AliasedCertCommand {
 				"No valid X509 certificates found");
 	}
 
-	protected CommandResult importPrivateKey(AliasedCertificateFactory certFx,
+	protected CommandResult importPrivateKey(BaseCertificateFactory certFx,
 			String alias, String filename, String password) throws Exception {
-		KeyStore ks = AS2Util.getCryptoHelper().getKeyStore();
+		KeyStore ks = AS2Util.getCryptoHelper().getKeyStore(certFx.getKeyStoreType());
 		ks.load(new FileInputStream(filename), password.toCharArray());
 
 		Enumeration<String> aliases = ks.aliases();

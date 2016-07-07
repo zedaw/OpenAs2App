@@ -6,5 +6,5 @@ public interface KeyStoreCertificateFactory extends CertificateFactory {
 
     public void setKeyStore(KeyStore keyStore);
     public KeyStore getKeyStore();
-
+    public KeyStoreType getKeyStoreType();
 }
