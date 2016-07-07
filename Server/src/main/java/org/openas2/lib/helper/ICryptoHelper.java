@@ -39,13 +39,6 @@ public interface ICryptoHelper {
 
     boolean isEncrypted(MimeBodyPart part) throws Exception;
 
-	/**
-     * @param filename
-     * @return
-     * @throws Exception 
-     */
-    KeyStore getKeyStore(KeyStoreType keyStoreType) throws Exception;
-    
     KeyStore loadKeyStore(KeyStoreType keyStoreType, InputStream in, char[] password) throws Exception;
 
     KeyStore loadKeyStore(KeyStoreType keyStoreType, String filename, char[] password) throws Exception;
@@ -74,4 +67,11 @@ public interface ICryptoHelper {
 			throws SMIMEException, OpenAS2Exception;
     
     void decompress(AS2Message msg) throws DispositionException;
+
+    /**
+     * @param filename
+     * @return
+     * @throws Exception 
+     */
+    KeyStore getKeyStore(KeyStoreType keyStoreType) throws Exception;
 }
