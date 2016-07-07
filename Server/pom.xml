@@ -37,15 +37,31 @@
               <mainClass>org.openas2.app.OpenAS2Server</mainClass>
               <addClasspath>true</addClasspath>
               <classpathLayoutType>custom</classpathLayoutType>
-              <customClasspathLayout>/lib/$${artifact.artifactId}-$${artifact.baseVersion}$${dashClassifier?}.$${artifact.extension}</customClasspathLayout>
+              <customClasspathLayout>$${artifact.artifactId}-$${artifact.baseVersion}$${dashClassifier?}.$${artifact.extension}</customClasspathLayout>
             </manifest>
-            <!--manifestEntries>
-              <Class-Path>lib/</Class-Path>
-            </manifestEntries-->
           </archive>
         </configuration>
       </plugin>
-
+      
+      <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-antrun-plugin</artifactId>
+          <executions>
+              <execution>
+                  <id>ant-test</id>
+                  <phase>prepare-package</phase>
+                  <configuration>
+                      <tasks>
+                          <fixcrlf srcdir="${project.build.outputDirectory}" eol="unix" includes="**/**"/>
+                      </tasks>
+                  </configuration>
+                  <goals>
+                      <goal>run</goal>
+                  </goals>
+              </execution>
+          </executions>
+      </plugin>
+      
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
@@ -63,7 +79,7 @@
           </execution>
         </executions>
       </plugin>
-
+      
     </plugins>
 
     <!-- Configuration of resources -->

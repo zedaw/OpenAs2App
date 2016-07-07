@@ -2,7 +2,7 @@
 <assembly xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd"
     xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <id>zip</id>
+  <id></id>
   <formats>
     <format>zip</format>
   </formats>
@@ -11,16 +11,24 @@
     <fileSet>
       <directory>bin</directory>
       <outputDirectory>/bin</outputDirectory>
+      <lineEnding>unix</lineEnding>
       <includes>
         <include>**/*</include>
       </includes>
+      <excludes>
+        <exclude>**/*.formatted</exclude>
+      </excludes>
     </fileSet>
     <fileSet>
       <directory>config</directory>
       <outputDirectory>/config</outputDirectory>
+      <lineEnding>unix</lineEnding>
       <includes>
         <include>**/*</include>
       </includes>
+      <excludes>
+        <exclude>**/*.formatted</exclude>
+      </excludes>
     </fileSet>
   </fileSets>
   <files>
