@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import org.openas2.OpenAS2Exception;
+import org.slf4j.event.Level;
 
 
 public abstract class BaseFormatter implements Formatter {

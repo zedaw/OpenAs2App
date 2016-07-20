@@ -8,9 +8,12 @@ import java.util.TimerTask;
 import org.openas2.OpenAS2Exception;
 import org.openas2.Session;
 import org.openas2.params.InvalidParameterException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
-public abstract class PollingModule extends BaseReceiverModule {	
+public abstract class PollingModule extends BaseReceiverModule {
+    private static final Logger logger = LoggerFactory.getLogger(PollingModule.class);
 	public static final String PARAM_POLLING_INTERVAL = "interval";
 	private Timer timer;
     private boolean busy;
@@ -51,7 +54,7 @@ public abstract class PollingModule extends BaseReceiverModule {
 			     poll();
                  setBusy(false);
             } else {
-                System.out.println("Miss tick");
+                logger.debug("Miss tick");
             }
 		}
 	}

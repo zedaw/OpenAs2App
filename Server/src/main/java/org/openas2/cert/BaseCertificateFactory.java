@@ -17,8 +17,6 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openas2.BaseComponent;
 import org.openas2.OpenAS2Exception;
 import org.openas2.Session;
@@ -31,6 +29,8 @@ import org.openas2.partner.SecurePartnership;
 import org.openas2.util.AS2Util;
 import org.openas2.util.FileMonitor;
 import org.openas2.util.FileMonitorListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class BaseCertificateFactory extends BaseComponent implements AliasedCertificateFactory, KeyStoreCertificateFactory, StorableCertificateFactory, FileMonitorListener {
     
@@ -44,7 +44,7 @@ public abstract class BaseCertificateFactory extends BaseComponent implements Al
 
     private KeyStore keyStore;
 
-    private Log logger = LogFactory.getLog(BaseCertificateFactory.class.getSimpleName());
+    private static final Logger logger = LoggerFactory.getLogger(BaseCertificateFactory.class);
 
     /**
      * 
@@ -421,7 +421,6 @@ public abstract class BaseCertificateFactory extends BaseComponent implements Al
      */
     public void load(String filename, char[] password) throws OpenAS2Exception {
         logger.info("Filename loaded : " + filename);
-        System.out.println("Filename loaded : " + filename);
         try {
             FileInputStream fIn = new FileInputStream(filename);
 

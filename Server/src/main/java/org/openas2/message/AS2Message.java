@@ -17,6 +17,8 @@ public class AS2Message extends BaseMessage implements Message {
 	private static final long serialVersionUID = 1L;
 	public static final String PROTOCOL_AS2 = "as2";
 	
+	//private transient Exception exception;
+	
     public String getProtocol() {
         return PROTOCOL_AS2;
     }
@@ -64,6 +66,19 @@ public class AS2Message extends BaseMessage implements Message {
     
     public String getAsyncMDNurl() {
     	return getHeader("Receipt-Delivery-Option");
+    }
+
+    /**
+     * @return
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("AS2Message [exception=");
+        builder.append(super.toString());
+        builder.append("]");
+        return builder.toString();
     }
 
 }

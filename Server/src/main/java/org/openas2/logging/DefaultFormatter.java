@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.openas2.OpenAS2Exception;
 import org.openas2.util.DateUtil;
+import org.slf4j.event.Level;
 
 
 public class DefaultFormatter extends BaseFormatter {

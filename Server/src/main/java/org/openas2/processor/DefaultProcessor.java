@@ -5,14 +5,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openas2.OpenAS2Exception;
 import org.openas2.message.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DefaultProcessor extends BaseProcessor {
     private List<ProcessorModule> modules;
-	private Log logger = LogFactory.getLog(DefaultProcessor.class.getSimpleName());
+    private static final Logger logger = LoggerFactory.getLogger(DefaultProcessor.class);
 
     public List<ProcessorModule> getActiveModules() {
         List<ProcessorModule> activeMods = new ArrayList<ProcessorModule>();
@@ -74,7 +74,7 @@ public class DefaultProcessor extends BaseProcessor {
             throw pex;
         } else if (!moduleFound) {
             msg.setLogMsg("No handler found for action: " + action);
-            logger.error(msg);
+            logger.error(msg.toString());
             throw new NoModuleException(action, msg, options);
         }
     }

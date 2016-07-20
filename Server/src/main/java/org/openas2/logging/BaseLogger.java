@@ -8,6 +8,7 @@ import java.util.StringTokenizer;
 import org.openas2.BaseComponent;
 import org.openas2.OpenAS2Exception;
 import org.openas2.message.Message;
+import org.slf4j.event.Level;
 
 
 public abstract class BaseLogger extends BaseComponent implements Logger {

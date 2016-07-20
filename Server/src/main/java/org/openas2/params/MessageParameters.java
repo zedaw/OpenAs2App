@@ -5,9 +5,9 @@ import java.util.StringTokenizer;
 
 import javax.mail.internet.ContentDisposition;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openas2.message.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class MessageParameters extends ParameterParser {
@@ -18,7 +18,7 @@ public class MessageParameters extends ParameterParser {
 	public static final String KEY_CONTENT_FILENAME = "content-disposition";
 	private Message target;
 
-	private Log logger = LogFactory.getLog(MessageParameters.class.getSimpleName());
+	private static final Logger logger = LoggerFactory.getLogger(MessageParameters.class);
 
 	public MessageParameters(Message target) {
 		super();

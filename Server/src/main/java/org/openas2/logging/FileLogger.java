@@ -11,6 +11,7 @@ import org.openas2.message.Message;
 import org.openas2.params.CompositeParameters;
 import org.openas2.params.DateParameters;
 import org.openas2.params.ParameterParser;
+import org.slf4j.event.Level;
 
 public class FileLogger extends BaseLogger {
     public static final String PARAM_FILENAME = "filename";

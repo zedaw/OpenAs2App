@@ -21,8 +21,6 @@ import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openas2.OpenAS2Exception;
 import org.openas2.Session;
 import org.openas2.WrappedException;
@@ -33,6 +31,8 @@ import org.openas2.params.DateParameters;
 import org.openas2.params.InvalidParameterException;
 import org.openas2.params.MessageParameters;
 import org.openas2.util.IOUtilOld;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public abstract class NetModule extends BaseReceiverModule {
@@ -47,7 +47,7 @@ public abstract class NetModule extends BaseReceiverModule {
     public static final String DEFAULT_ERRORS = "$date.yyyyMMddhhmmss$"; 
     
     private HTTPServerThread mainThread;
-	private Log logger = LogFactory.getLog(NetModule.class.getSimpleName());
+    private static final Logger logger = LoggerFactory.getLogger(NetModule.class);
 
     public void doStart() throws OpenAS2Exception {
         try {
@@ -312,7 +312,7 @@ public abstract class NetModule extends BaseReceiverModule {
                 }
             }
 
-            System.out.println("exited");
+            logger.info("exited");
         }
 
         

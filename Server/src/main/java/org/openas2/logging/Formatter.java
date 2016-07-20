@@ -3,6 +3,7 @@ package org.openas2.logging;
 import java.io.OutputStream;
 
 import org.openas2.OpenAS2Exception;
+import org.slf4j.event.Level;
 
 
 public interface Formatter {

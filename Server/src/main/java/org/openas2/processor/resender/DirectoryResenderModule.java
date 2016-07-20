@@ -16,8 +16,6 @@ import java.util.StringTokenizer;
 
 import javax.mail.Header;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openas2.OpenAS2Exception;
 import org.openas2.Session;
 import org.openas2.WrappedException;
@@ -26,6 +24,8 @@ import org.openas2.params.InvalidParameterException;
 import org.openas2.processor.sender.SenderModule;
 import org.openas2.util.DateUtil;
 import org.openas2.util.IOUtilOld;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class DirectoryResenderModule extends BaseResenderModule {
@@ -36,7 +36,7 @@ public class DirectoryResenderModule extends BaseResenderModule {
 	// TODO Resend set to 15 minutes. Implement a scaling resend time with eventual permanent failure of transmission    
 	public static final long DEFAULT_RESEND_DELAY = 15 * 60 * 1000; // 15 minutes
 
-	private Log logger = LogFactory.getLog(DirectoryResenderModule.class.getSimpleName());
+	private static final Logger logger = LoggerFactory.getLogger(DirectoryResenderModule.class);
 
 	
 	public boolean canHandle(String action, Message msg, Map<Object, Object> options) {

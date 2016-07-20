@@ -3,8 +3,8 @@ package org.openas2;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
  ;
 
 
@@ -16,7 +16,7 @@ public class OpenAS2Exception extends Exception {
 	public static final String SOURCE_MESSAGE = "message";
     public static final String SOURCE_FILE = "file";
     private Map<String,Object> sources;
-	private Log logger = LogFactory.getLog(OpenAS2Exception.class.getSimpleName());
+	private static final Logger logger = LoggerFactory.getLogger(OpenAS2Exception.class);
 
     public OpenAS2Exception() {
         log(false);
@@ -55,6 +55,7 @@ public class OpenAS2Exception extends Exception {
     public void addSource(String id, Object source) {
         Map<String,Object> sources = getSources();
         sources.put(id, source);
+        
     }
 
     public void terminate() {
@@ -62,6 +63,13 @@ public class OpenAS2Exception extends Exception {
     }
 
     protected void log(boolean terminated) {
-    	logger.error("Error occurred:: " + org.openas2.logging.Log.getExceptionMsg(this) + "\n    Sources: "+ this.getSources(), this);
+        StringBuilder builder = new StringBuilder("Error occurred:: \n");
+        if (getSources().containsKey(SOURCE_MESSAGE)) {
+            builder.append("[[MESSAGE]=").append(getSource(SOURCE_MESSAGE)).append("]\n");
+        }
+        if (getSources().containsKey(SOURCE_FILE)) {
+            builder.append("[[FILE]=").append(getSource(SOURCE_FILE)).append("]\n");
+        }
+    	logger.error(builder.toString(), this);
     }
 }

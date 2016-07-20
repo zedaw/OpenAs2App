@@ -6,7 +6,6 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.mail.Header;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetHeaders;
 import javax.mail.internet.MimeBodyPart;
@@ -272,39 +271,81 @@ public abstract class BaseMessage implements Message {
         getHeaders().addHeader(key, value);
     }
 
-    public String toString() {
-        StringBuffer buf = new StringBuffer();
-        buf.append("Message From:").append(getPartnership().getSenderIDs());
-        buf.append("To:").append(getPartnership().getReceiverIDs());
+//    public String toString() {
+//        StringBuffer buf = new StringBuffer();
+//        buf.append("Message From:").append(getPartnership().getSenderIDs());
+//        buf.append("To:").append(getPartnership().getReceiverIDs());
+//
+//        Enumeration<Header> headerEn = getHeaders().getAllHeaders();
+//        buf.append("\r\nHeaders:{");
+//
+//        while (headerEn.hasMoreElements()) {
+//            Header header = headerEn.nextElement();
+//            buf.append(header.getName()).append("=").append(header.getValue());
+//
+//            if (headerEn.hasMoreElements()) {
+//                buf.append(", ");
+//            }
+//        }
+//
+//        buf.append("}");
+//        buf.append("\r\nAttributes:").append(getAttributes());
+//
+//        MessageMDN mdn = getMDN();
+//
+//        if (mdn != null) {
+//            buf.append("\r\nMDN:");
+//            buf.append(mdn.toString());
+//        }
+//
+//        return buf.toString();
+//    }
 
-        Enumeration<Header> headerEn = getHeaders().getAllHeaders();
-        buf.append("\r\nHeaders:{");
-
-        while (headerEn.hasMoreElements()) {
-            Header header = headerEn.nextElement();
-            buf.append(header.getName()).append("=").append(header.getValue());
-
-            if (headerEn.hasMoreElements()) {
-                buf.append(", ");
-            }
-        }
-
-        buf.append("}");
-        buf.append("\r\nAttributes:").append(getAttributes());
-
-        MessageMDN mdn = getMDN();
-
-        if (mdn != null) {
-            buf.append("\r\nMDN:");
-            buf.append(mdn.toString());
-        }
-
-        return buf.toString();
-    }
-
+    
+    
     public void updateMessageID() throws InvalidParameterException {
         setMessageID(generateMessageID());
     }
+
+    /**
+     * @return
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("BaseMessage [history=");
+        builder.append(history);
+        builder.append(", headers=");
+        builder.append(headers);
+        builder.append(", attributes=");
+        builder.append(attributes);
+        builder.append(", MDN=");
+        builder.append(MDN);
+        builder.append(", data=");
+        builder.append(data);
+        builder.append(", partnership=");
+        builder.append(partnership);
+        builder.append(", compressionType=");
+        builder.append(compressionType);
+        builder.append(", rxdMsgWasSigned=");
+        builder.append(rxdMsgWasSigned);
+        builder.append(", rxdMsgWasEncrypted=");
+        builder.append(rxdMsgWasEncrypted);
+        builder.append(", options=");
+        builder.append(options);
+        builder.append(", calculatedMIC=");
+        builder.append(calculatedMIC);
+        builder.append(", logMsg=");
+        builder.append(logMsg);
+        builder.append(", status=");
+        builder.append(status);
+        builder.append(", customOuterMimeHeaders=");
+        builder.append(customOuterMimeHeaders);
+        builder.append("]");
+        return builder.toString();
+    }
+
 
     private void readObject(java.io.ObjectInputStream in)
         throws IOException, ClassNotFoundException {

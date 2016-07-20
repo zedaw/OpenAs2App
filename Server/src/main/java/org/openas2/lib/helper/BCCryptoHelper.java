@@ -31,8 +31,6 @@ import javax.mail.internet.ContentType;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.cms.AttributeTable;
 import org.bouncycastle.asn1.cms.CMSAttributes;
@@ -87,9 +85,11 @@ import org.openas2.message.AS2Message;
 import org.openas2.message.Message;
 import org.openas2.processor.receiver.AS2ReceiverModule;
 import org.openas2.util.DispositionType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BCCryptoHelper implements ICryptoHelper {
-    private Log logger = LogFactory.getLog(BCCryptoHelper.class.getSimpleName());
+    private static final Logger logger = LoggerFactory.getLogger(BCCryptoHelper.class);
 
     public boolean isEncrypted(MimeBodyPart part) throws MessagingException {
         ContentType contentType = new ContentType(part.getContentType());
@@ -150,23 +150,24 @@ public class BCCryptoHelper implements ICryptoHelper {
     public String calculateMIC(MimeBodyPart part, String digest, boolean includeHeaders, boolean noCanonicalize)
             throws GeneralSecurityException, MessagingException, IOException {
         String micAlg = convertAlgorithm(digest, true);
+        logger.debug("MIC algorithm conversion {} => {}", digest, micAlg);
 
         if (logger.isDebugEnabled())
-        	logger.debug("Calc MIC called with digest: " + digest + " ::: Incl headers? " + includeHeaders
-        			 + " ::: Prevent canonicalization: " + noCanonicalize + " ::: Encoding: " + part.getEncoding());
+        	logger.debug("Calc MIC called with digest [" + digest + "] ::: Incl headers? [" + includeHeaders
+        			 + "] ::: Prevent canonicalization: [" + noCanonicalize + "] ::: Encoding: [" + part.getEncoding() + "]");
         MessageDigest md = MessageDigest.getInstance(micAlg, "BC");
 
         if (includeHeaders && logger.isTraceEnabled()) {
-        	String headers = "";
+        	StringBuilder headers = new StringBuilder("");
         	@SuppressWarnings("unchecked")
             Enumeration<Header> headersEnum = part.getAllHeaders();
         	while (headersEnum.hasMoreElements())
 			{
 				Header hd = headersEnum.nextElement();
-				headers  = "\n     " + hd.getName() + "::" + hd.getValue();
+				headers.append("\n     ").append(hd.getName()).append("::").append(hd.getValue());
 				
 			}
-        	logger.trace("Calculating MIC on MIMEPART Headers: " + headers);
+        	logger.trace("Calculating MIC on MIMEPART Headers: " + headers.toString());
         }
         // convert the Mime data to a byte array, then to an InputStream
         ByteArrayOutputStream bOut = new ByteArrayOutputStream();
@@ -286,7 +287,7 @@ public class BCCryptoHelper implements ICryptoHelper {
 				headers = printHeaders(part.getAllHeaders());
 			} catch (Throwable e)
 			{
-				logger.debug("Error logging mime part for encrypting: " + org.openas2.logging.Log.getExceptionMsg(e), e);
+				logger.debug("Error logging mime part for encrypting: ", e);
 			}
 
         	logger.debug("Encrypting on MIME part containing the following headers: " + headers);
@@ -335,7 +336,7 @@ public class BCCryptoHelper implements ICryptoHelper {
     				headers = printHeaders(part.getAllHeaders());
     			} catch (Throwable e)
     			{
-    				logger.debug("Error logging mime part for signing: " + org.openas2.logging.Log.getExceptionMsg(e), e);
+    				logger.debug("Error logging mime part for signing: ", e);
     			}
 
             	logger.debug("Signing on MIME part containing the following headers: " + headers);
@@ -411,7 +412,7 @@ public class BCCryptoHelper implements ICryptoHelper {
 	        	logger.trace("Checking signature on SIGNED MIME part extracted from multipart contains headers: " + headers);
 			} catch (Throwable e)
 			{
-				logger.trace("Error logging mime part for signer: " + org.openas2.logging.Log.getExceptionMsg(e), e);
+				logger.trace("Error logging mime part for signer: ", e);
 			}
 
         }
@@ -480,7 +481,7 @@ public class BCCryptoHelper implements ICryptoHelper {
 		{
 
 			msg.setLogMsg("Error decompressing received message: " + ex.getCause());
-			logger.error(msg, ex);
+			logger.error(msg.toString(), ex);
 			throw new DispositionException(new DispositionType("automatic-action", "MDN-sent-automatically",
 					"processed", "Error", "unexpected-processing-error"), AS2ReceiverModule.DISP_DECOMPRESSION_ERROR,
 					ex);
@@ -763,7 +764,7 @@ public class BCCryptoHelper implements ICryptoHelper {
 					);
 			} catch (Throwable e)
 			{
-				logger.debug("Error logging signer info: " + org.openas2.logging.Log.getExceptionMsg(e), e);
+				logger.debug("Error logging signer info: ", e);
 			}
         }
     }

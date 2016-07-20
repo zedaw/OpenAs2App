@@ -6,12 +6,16 @@ package org.openas2.util;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author joseph mcverry
  *
  */
 public class ByteCoder {
-	
+    private static final Logger logger = LoggerFactory.getLogger(ByteCoder.class);
+    
 	public static String encode(String inStr) {
 		StringBuffer sb = new StringBuffer();
 		byte me[] = inStr.getBytes();
@@ -45,8 +49,8 @@ public class ByteCoder {
 	   String in = encode(sb.toString());
 	   String out = decode(in);
 	   if (sb.toString().equals(out))
-		   System.out.println("success");
+	       logger.info("success");
 	   else  
-		   System.out.println("failed expected:"+in+"\ngot:"+out);
+	       logger.info("failed expected:"+in+"\ngot:"+out);
    }
 }

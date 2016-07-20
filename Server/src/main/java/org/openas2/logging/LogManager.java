@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.openas2.message.Message;
+import org.slf4j.event.Level;
 
 
 public class LogManager {
@@ -67,7 +68,7 @@ public class LogManager {
                 else logger.log(level, clazzName + ": " + msg.toString(), null);
             }
         } else {
-            System.out.println(level.getName() + " " + msg.toString());
+            //logger.info(level.name() + " " + msg.toString());
         }
     }
 

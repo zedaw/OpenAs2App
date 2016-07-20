@@ -37,4 +37,5 @@ public class AS1Message extends BaseMessage {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
 }

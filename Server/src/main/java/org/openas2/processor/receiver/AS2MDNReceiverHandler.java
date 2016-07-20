@@ -8,8 +8,6 @@ import javax.activation.DataHandler;
 import javax.mail.internet.ContentType;
 import javax.mail.internet.MimeBodyPart;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openas2.OpenAS2Exception;
 import org.openas2.message.AS2Message;
 import org.openas2.message.AS2MessageMDN;
@@ -18,11 +16,13 @@ import org.openas2.message.MessageMDN;
 import org.openas2.util.AS2Util;
 import org.openas2.util.ByteArrayDataSource;
 import org.openas2.util.HTTPUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AS2MDNReceiverHandler implements NetModuleHandler {
     private AS2MDNReceiverModule module;
 
-    private Log logger = LogFactory.getLog(AS2MDNReceiverHandler.class.getSimpleName());
+    private static final Logger logger = LoggerFactory.getLogger(AS2MDNReceiverHandler.class);
 
     
     public AS2MDNReceiverHandler(AS2MDNReceiverModule module) {
@@ -93,7 +93,7 @@ public class AS2MDNReceiverHandler implements NetModuleHandler {
 				{
 				}
 				msg.setLogMsg("Unhandled error condition receiving asynchronous MDN. Message and asociated files cleanup will be attempted but may be in an unknown state.");
-				logger.error(msg, e);
+				logger.error(msg.toString(), e);
 			}
 			/*
 			 * Most likely a resend abort of max resend reached if
@@ -110,7 +110,7 @@ public class AS2MDNReceiverHandler implements NetModuleHandler {
 				{ // What to do .... 
 				}
 				msg.setLogMsg("Exception receiving asynchronous MDN. Message and asociated files cleanup will be attempted but may be in an unknown state.");
-				logger.error(msg, e);
+				logger.error(msg.toString(), e);
 
 			}
 			AS2Util.cleanupFiles(msg, true);

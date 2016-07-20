@@ -118,7 +118,7 @@ public interface Message extends Serializable {
     public String getLogMsg();
 
     public void setLogMsg(String msg);
-
+    
     public String getCalculatedMIC();
 
 	public void setCalculatedMIC(String calculatedMIC);

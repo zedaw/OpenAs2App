@@ -19,8 +19,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openas2.OpenAS2Exception;
 import org.openas2.Session;
 import org.openas2.WrappedException;
@@ -28,6 +26,8 @@ import org.openas2.params.InvalidParameterException;
 import org.openas2.util.FileMonitor;
 import org.openas2.util.FileMonitorListener;
 import org.openas2.util.XMLUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -48,7 +48,7 @@ public class XMLPartnershipFactory extends BasePartnershipFactory
     private FileMonitor fileMonitor;
     private Map<String,Object> partners;
 
-	private Log logger = LogFactory.getLog(XMLPartnershipFactory.class.getSimpleName());
+    private static final Logger logger = LoggerFactory.getLogger(XMLPartnershipFactory.class);
 
     
     public void setFileMonitor(FileMonitor fileMonitor) {

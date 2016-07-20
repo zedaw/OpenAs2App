@@ -5,14 +5,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class CompositeParameters extends ParameterParser {
     private Map<String, ParameterParser> parameterParsers;
     private boolean ignoreMissingParsers;
-	private Log logger = LogFactory.getLog(CompositeParameters.class.getSimpleName());
+    private static final Logger logger = LoggerFactory.getLogger(CompositeParameters.class);
 
     public CompositeParameters(boolean ignoreMissingParsers) {
         super();

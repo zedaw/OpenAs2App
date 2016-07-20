@@ -14,7 +14,6 @@ import javax.activation.DataHandler;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeBodyPart;
 
-import org.apache.commons.logging.LogFactory;
 import org.openas2.Session;
 import org.openas2.XMLSession;
 import org.openas2.cert.CertificateFactory;
@@ -27,6 +26,8 @@ import org.openas2.partner.Partnership;
 import org.openas2.partner.SecurePartnership;
 import org.openas2.util.AS2Util;
 import org.openas2.util.ByteArrayDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author christopher broderick
@@ -36,7 +37,7 @@ public class MimeBodyPartEncodingTest
 {
 	protected static OutputStream sysOut;
 	protected static BufferedWriter sysOutWriter;
-	
+	private static final Logger logger = LoggerFactory.getLogger(MimeBodyPartEncodingTest.class);
 
 	public static void main(String[] args)
 	{
@@ -44,9 +45,8 @@ public class MimeBodyPartEncodingTest
 		int exitStatus = 0;
 		System.setProperty("org.apache.commons.logging.Log", "org.openas2.logging.Log");
 		//System.setProperty("openas2log.properties", "Server/bin/openas2log.properties");
-		LogFactory.getFactory().setAttribute("level", "TRACE");
-		System.out.println("Current working directory: " + System.getProperty("user.dir") + "\n");
-		System.out.println("Logging prop: " + System.getProperty("org.apache.commons.logging.Log") + "\n");
+		logger.info("Current working directory: " + System.getProperty("user.dir") + "\n");
+		logger.info("Logging prop: " + System.getProperty("org.apache.commons.logging.Log") + "\n");
 		File f = new File(TestConfig.TEST_OUTPUT_FOLDER);
 		f.mkdirs();
 
@@ -123,7 +123,7 @@ public class MimeBodyPartEncodingTest
 			PrivateKey senderKey = certFx.getPrivateKey(msg, senderCert);
 			String digest = msg.getPartnership().getAttribute(SecurePartnership.PA_SIGN);
 
-			System.out.println("Params for creating signed body part:: SIGN DIGEST: " + digest
+			logger.info("Params for creating signed body part:: SIGN DIGEST: " + digest
 					+ "\n CERT ALG NAME EXTRACTED: " + senderCert.getSigAlgName()
 					+ "\n CERT PUB KEY ALG NAME EXTRACTED: " + senderCert.getPublicKey().getAlgorithm()
 					+ msg.getLogMsgID());
@@ -132,7 +132,7 @@ public class MimeBodyPartEncodingTest
 			FileOutputStream fos = new FileOutputStream(testFile);
 		    write(fos, body);
 		    fos.close();
-			System.out.println("MimeBodyPart written to: " + testFile);
+		    logger.info("MimeBodyPart written to: " + testFile);
             boolean isRemoveCmsAlgorithmProtectionAttr = "true".equalsIgnoreCase(msg.getPartnership().getAttribute(Partnership.PA_REMOVE_PROTECTION_ATTRIB));
 			MimeBodyPart signedMbp = AS2Util.getCryptoHelper().sign(body, senderCert, senderKey, digest, contentTxfrEncoding
 					, msg.getPartnership().isRenameDigestToOldName(), isRemoveCmsAlgorithmProtectionAttr);
@@ -140,7 +140,7 @@ public class MimeBodyPartEncodingTest
 			fos = new FileOutputStream(testFile);
 			write(fos, signedMbp);
 			fos.close();
-			System.out.println("MimeBodyPart written to: " + testFile);
+			logger.info("MimeBodyPart written to: " + testFile);
 			
 			String algorithm = msg.getPartnership().getAttribute(SecurePartnership.PA_ENCRYPT);
 			X509Certificate receiverCert = certFx.getCertificate(msg, Partnership.PTYPE_RECEIVER);
@@ -149,7 +149,7 @@ public class MimeBodyPartEncodingTest
 			fos = new FileOutputStream(testFile);
 			write(fos, signedMbp);
 			fos.close();
-			System.out.println("MimeBodyPart written to: " + testFile);
+			logger.info("MimeBodyPart written to: " + testFile);
 
 
 		} catch (Exception e)
@@ -178,19 +178,20 @@ public class MimeBodyPartEncodingTest
 
 	public static void write(String msg)
 	{
-		if (sysOutWriter == null)
-		{
-			sysOutWriter = new BufferedWriter(new OutputStreamWriter(System.out));
-		}
-
-		try
-		{
-			sysOutWriter.write(msg);
-			sysOutWriter.flush();
-		} catch (java.io.IOException e)
-		{
-			e.printStackTrace();
-		}
+	    logger.info(msg);
+//		if (sysOutWriter == null)
+//		{
+//			sysOutWriter = new BufferedWriter(new OutputStreamWriter(System.out));
+//		}
+//
+//		try
+//		{
+//			sysOutWriter.write(msg);
+//			sysOutWriter.flush();
+//		} catch (java.io.IOException e)
+//		{
+//			e.printStackTrace();
+//		}
 	}
 
 	public static void getPartnerInfo(Message msg) throws InvalidParameterException

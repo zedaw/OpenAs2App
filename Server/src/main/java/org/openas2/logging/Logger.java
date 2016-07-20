@@ -2,6 +2,7 @@ package org.openas2.logging;
 
 import org.openas2.Component;
 import org.openas2.message.Message;
+import org.slf4j.event.Level;
 
 
 public interface Logger extends Component {

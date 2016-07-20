@@ -20,6 +20,7 @@ import org.openas2.partner.PartnershipFactory;
 import org.openas2.processor.Processor;
 import org.openas2.processor.ProcessorModule;
 import org.openas2.util.XMLUtil;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -34,6 +35,7 @@ import org.xml.sax.SAXException;
  *
  */
 public class XMLSession extends BaseSession implements CommandRegistryFactory {
+    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(XMLSession.class);
 	public static final String EL_CERTIFICATES = "certificates";
 	public static final String EL_CMDPROCESSOR = "commandProcessors";
 	public static final String EL_PROCESSOR = "processor";
@@ -101,7 +103,7 @@ public class XMLSession extends BaseSession implements CommandRegistryFactory {
 			} else if (nodeName.equals(EL_COMMANDS)) {
 				loadCommands(rootNode);
 			} else if (nodeName.equals(EL_LOGGERS)) {
-				loadLoggers(rootNode);
+				//loadLoggers(rootNode);
 			} else if (nodeName.equals("#text")) {
 				// do nothing
 			} else if (nodeName.equals("#comment")) {
@@ -132,7 +134,8 @@ public class XMLSession extends BaseSession implements CommandRegistryFactory {
 		else {
 			// if using the OpenAS2 loggers the log manager must registered with the jvm argument
 			// -Dorg.apache.commons.logging.Log=org.openas2.logging.Log
-			throw new OpenAS2Exception("the OpenAS2 loggers' log manager must registered with the jvm argument -Dorg.apache.commons.logging.Log=org.openas2.logging.Log");
+			//throw new OpenAS2Exception("the OpenAS2 loggers' log manager must registered with the jvm argument -Dorg.apache.commons.logging.Log=org.openas2.logging.Log");
+		    LOG.info("OpenAS2 default logger correctly initialized with logback");
 		}
 		NodeList loggers = rootNode.getChildNodes();
 		Node logger;

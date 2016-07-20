@@ -1,17 +1,16 @@
 package org.openas2.app;
 
 import java.io.BufferedWriter;
-import java.io.OutputStreamWriter;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openas2.OpenAS2Exception;
 import org.openas2.Session;
 import org.openas2.XMLSession;
 import org.openas2.cmd.CommandManager;
 import org.openas2.cmd.CommandRegistry;
 import org.openas2.cmd.processor.BaseCommandProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /** 
@@ -23,7 +22,7 @@ import org.openas2.cmd.processor.BaseCommandProcessor;
  */
 public class OpenAS2Server {
 	protected BufferedWriter sysOut;
-
+	private static final Logger logger = LoggerFactory.getLogger(OpenAS2Server.class);
 	
 	public static void main(String[] args) {
 		OpenAS2Server server = new OpenAS2Server();
@@ -36,34 +35,38 @@ public class OpenAS2Server {
 		int exitStatus = 0;
 
 		try {
-			Log logger = LogFactory.getLog(OpenAS2Server.class.getSimpleName());
-			
-			write(Session.TITLE + "\r\nStarting Server...\r\n");
+		    
+			logger.trace("=== TRACE LEVEL ===");
+			logger.debug("=== DEBUG LEVEL ===");
+			logger.info("=== INFO LEVEL ===");
+			logger.warn("=== WARN LEVEL ===");
+			logger.error("=== ERROR LEVEL ===");
+			logger.info(Session.TITLE + "\r\nStarting Server...");
 
 			// create the OpenAS2 Session object
 			// this is used by all other objects to access global configs and functionality
-			write("Loading configuration...\r\n");
+			logger.info("Loading configuration...");
 
 			if (args.length > 0) {
 				session = new XMLSession(args[0]);
 			} else {
-				write("Usage:\r\n");
-				write("java org.openas2.app.OpenAS2Server <configuration file>\r\n");
+				logger.error("Usage:\r\n");
+				logger.error("java org.openas2.app.OpenAS2Server <configuration file>");
 				throw new Exception("Missing configuration file");
 			}
 			// create a command processor
 
 			// get a registry of Command objects, and add Commands for the Session
-			write("Registering Session to Command Processor...\r\n");
+			logger.info("Registering Session to Command Processor...");
 
 			CommandRegistry reg = session.getCommandRegistry();
 
 			// start the active processor modules
-			write("Starting Active Modules...\r\n");
+			logger.info("Starting Active Modules...");
 			session.getProcessor().startActiveModules();
 
 			// enter the command processing loop
-			write("OpenAS2 V" + Session.VERSION + " Started\r\n");
+			logger.info("OpenAS2 V" + Session.VERSION + " Started");
 
 			
 			logger.info("- OpenAS2 Started - V" + Session.VERSION);
@@ -71,8 +74,7 @@ public class OpenAS2Server {
 			CommandManager cmdMgr = session.getCommandManager();
 			List<BaseCommandProcessor> processors = cmdMgr.getProcessors();
 			for (int i = 0; i < processors.size(); i++) {
-				write("Loading Command Processor..." + processors.toString()
-						+ "\r\n");
+				logger.info("Loading Command Processor..." + processors.toString());
 				cmd = (BaseCommandProcessor) processors.get(i);
 				cmd.init();
 				cmd.addCommands(reg);
@@ -89,10 +91,10 @@ public class OpenAS2Server {
 			logger.info("- OpenAS2 Stopped -");
 		} catch (Exception e) {
 			exitStatus = -1;
-			e.printStackTrace();
+			logger.error("Exception happend ", e);
 		} catch (Error err) {
 			exitStatus = -1;
-			err.printStackTrace();
+			logger.error("Fatal Error happend ", err);
 		} finally {
 
 			if (session != null) {
@@ -111,22 +113,22 @@ public class OpenAS2Server {
 				}
 			}
 
-			write("OpenAS2 has shut down\r\n");
+			logger.info("OpenAS2 has shut down\r\n");
 
 			System.exit(exitStatus);
 		}
 	}
 
-	public void write(String msg) {
-		if (sysOut == null) {
-			sysOut = new BufferedWriter(new OutputStreamWriter(System.out));
-		}
-
-		try {
-			sysOut.write(msg);
-			sysOut.flush();
-		} catch (java.io.IOException e) {
-			e.printStackTrace();
-		}
-	}
+//	public void write(String msg) {
+//		if (sysOut == null) {
+//			sysOut = new BufferedWriter(new OutputStreamWriter(System.out));
+//		}
+//
+//		try {
+//			sysOut.write(msg);
+//			sysOut.flush();
+//		} catch (java.io.IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
 }

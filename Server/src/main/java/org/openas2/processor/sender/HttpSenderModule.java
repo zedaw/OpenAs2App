@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.KeyStore;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -17,27 +20,22 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
-import java.security.KeyStore;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openas2.OpenAS2Exception;
 import org.openas2.WrappedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public abstract class HttpSenderModule extends BaseSenderModule implements SenderModule {
 	
 	  public static final String PARAM_READ_TIMEOUT = "readtimeout";
 	  public static final String PARAM_CONNECT_TIMEOUT = "connecttimeout";
-	  
+	  private static final Logger logger = LoggerFactory.getLogger(HttpSenderModule.class);
 	
     public HttpURLConnection getConnection(String url, boolean output, boolean input,
         boolean useCaches, String requestMethod) throws OpenAS2Exception
     {
     	if (url == null) throw new OpenAS2Exception("HTTP sender module received empty URL string.");
-    	Log logger = LogFactory.getLog(HttpSenderModule.class.getSimpleName());
         try {
         	System.setProperty("sun.net.client.defaultReadTimeout", getParameter(PARAM_READ_TIMEOUT, "60000"));
             System.setProperty("sun.net.client.defaultConnectTimeout", getParameter(PARAM_CONNECT_TIMEOUT, "60000"));

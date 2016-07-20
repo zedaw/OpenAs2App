@@ -9,6 +9,7 @@ import java.util.Map;
 import org.openas2.OpenAS2Exception;
 import org.openas2.Session;
 import org.openas2.message.Message;
+import org.slf4j.event.Level;
 
 /**
  * class to write log meesage to a socket

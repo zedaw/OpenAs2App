@@ -27,9 +27,13 @@ import org.openas2.params.InvalidParameterException;
 import org.openas2.params.MessageMDNParameters;
 import org.openas2.params.MessageParameters;
 import org.openas2.params.ParameterParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
 
 
 public class EmailLogger extends BaseLogger {
+    private static final Logger logger = LoggerFactory.getLogger(EmailLogger.class);
     public static final String PARAM_FROM_DISPLAY = "from_display";
     public static final String PARAM_FROM = "from";
     public static final String PARAM_TO = "to";
@@ -62,11 +66,11 @@ public class EmailLogger extends BaseLogger {
 				props.load(in);
 			} catch (FileNotFoundException e)
 			{
-	            System.out.println("File not found for attribute javax.mail.properties.file: " + filename);
+	            logger.error("File not found for attribute javax.mail.properties.file: " + filename);
 	            e.printStackTrace();
 			} catch (IOException e)
 			{
-	            System.out.println("File for attribute javax.mail.properties.file cannot be accessed: " + filename);
+	            logger.error("File for attribute javax.mail.properties.file cannot be accessed: " + filename);
 	            e.printStackTrace();
 			}
             finally
@@ -96,8 +100,7 @@ public class EmailLogger extends BaseLogger {
             String subject = getSubject(level, msgText);
             sendMessage(subject, getFormatter().format(level, msgText + (as2Msg == null?"":as2Msg.getLogMsgID())));
         } catch (Exception e) {
-            System.out.println("Failed to send email: " + org.openas2.logging.Log.getExceptionMsg(e));
-            e.printStackTrace();
+            logger.error("Failed to send email: ", e);
         }
     }
 
@@ -128,8 +131,7 @@ public class EmailLogger extends BaseLogger {
 
             sendMessage(subject, body.toString());
         } catch (Exception e) {
-            System.out.println("Failed to send email: " + org.openas2.logging.Log.getExceptionMsg(e));
-            e.printStackTrace();
+            logger.error("Failed to send email: ", e);
         }
     }
 
@@ -138,7 +140,7 @@ public class EmailLogger extends BaseLogger {
     }
 
     protected String getSubject(Level level, String msg) {
-        StringBuffer subject = new StringBuffer("OpenAS2 Log (" + level.getName() + "): " + msg.substring(0, msg.indexOf("\n")));
+        StringBuffer subject = new StringBuffer("OpenAS2 Log (" + level.name() + "): " + msg.substring(0, msg.indexOf("\n")));
 
         return subject.toString();
     }
@@ -260,7 +262,7 @@ public class EmailLogger extends BaseLogger {
 	        	password = getParameter("smtppwd", true);
 			} catch (InvalidParameterException e)
 			{
-				throw new OpenAS2Exception("Failed to find email logger parameter: " + org.openas2.logging.Log.getExceptionMsg(e), e);
+				throw new OpenAS2Exception("Failed to find email logger parameter: ", e);
 			}
         }
         final String uid = userName;
@@ -294,7 +296,7 @@ public class EmailLogger extends BaseLogger {
 				m.setFrom(new InternetAddress(from, fromDisplay));
 			} catch (UnsupportedEncodingException e)
 			{
-				System.out.println("Check the text in the \"" + PARAM_FROM_DISPLAY + "\" parameter for encoding issues.");
+				logger.error("Check the text in the \"" + PARAM_FROM_DISPLAY + "\" parameter for encoding issues.");
 				e.printStackTrace();
 				m.setFrom(new InternetAddress(from));
 			}
@@ -326,13 +328,13 @@ public class EmailLogger extends BaseLogger {
 
             if (isDebugOn)
             {
-            	System.out.println("Mail Logger Config:::");
-            	System.out.println("\tSMTP server: " + props.get("mail.smtp.host"));
-            	System.out.println("\tSMTP port: " + props.get("mail.smtp.port"));
-            	System.out.println("\tSMTP protocol: " + protocol);
-            	System.out.println("\tSMTP authentication: " + isAuth);
-            	System.out.println("\tSMTP user name: " + uid);
-            	System.out.println("\tSMTP password: " + pwd);
+            	logger.debug("Mail Logger Config:::");
+            	logger.debug("\tSMTP server: " + props.get("mail.smtp.host"));
+            	logger.debug("\tSMTP port: " + props.get("mail.smtp.port"));
+            	logger.debug("\tSMTP protocol: " + protocol);
+            	logger.debug("\tSMTP authentication: " + isAuth);
+            	logger.debug("\tSMTP user name: " + uid);
+            	logger.debug("\tSMTP password: " + pwd);
             }
 
             if (isAuth)
@@ -355,7 +357,7 @@ public class EmailLogger extends BaseLogger {
         } finally {
             if (isDebugOn)
             {
-            	System.out.println("Mail Logger EXIT...:::");
+            	logger.debug("Mail Logger EXIT...:::");
             }
         }
     }

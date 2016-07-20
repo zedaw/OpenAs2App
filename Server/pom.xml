@@ -43,7 +43,7 @@
         </configuration>
       </plugin>
       
-      <plugin>
+      <!--plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-antrun-plugin</artifactId>
           <executions>
@@ -52,7 +52,7 @@
                   <phase>prepare-package</phase>
                   <configuration>
                       <tasks>
-                          <fixcrlf srcdir="${project.build.outputDirectory}" eol="unix" includes="**/**"/>
+                          <fixcrlf srcdir="${project.build.outputDirectory}" eol="unix" includes="**/*.xml" excludes="**/*.class,**/*.jks"/>
                       </tasks>
                   </configuration>
                   <goals>
@@ -60,7 +60,7 @@
                   </goals>
               </execution>
           </executions>
-      </plugin>
+      </plugin-->
       
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
@@ -133,21 +133,9 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>commons-logging</groupId>
-      <artifactId>commons-logging</artifactId>
-      <version>1.2</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.0.13</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>1.7.21</version>
+      <version>1.1.7</version>
       <scope>compile</scope>
     </dependency>
     <dependency>

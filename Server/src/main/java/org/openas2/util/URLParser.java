@@ -4,8 +4,12 @@ package org.openas2.util;
  */
 
 import org.openas2.lib.OpenAS2Exception;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class URLParser {
+    private static final Logger logger = LoggerFactory.getLogger(URLParser.class);
+    
 	String url = "";
 	String host = "?";
 	int port = 80;
@@ -43,8 +47,8 @@ public class URLParser {
 		
 		URLParser UP = new URLParser("http://www.google.com/search?ie=UTF-8&oe=UTF-8&sourceid=navclient&gfns=1&q=urlparser+java");
 	
-		System.out.println("host : " + UP.getHOST());
-		System.out.println("port : " + UP.getPORT());
-		System.out.println("resource : " + UP.getRESOURCE());
+		logger.info("host : " + UP.getHOST());
+		logger.info("port : " + UP.getPORT());
+		logger.info("resource : " + UP.getRESOURCE());
 	}
 }
