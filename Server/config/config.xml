@@ -1,7 +1,7 @@
 <openas2>
-	<certificates classname="org.openas2.cert.PKCS12CertificateFactory"
-		filename="%home%/as2_certs.p12"
-		password="testas2"
+	<certificates classname="org.openas2.cert.JKSCertificateFactory"
+		filename="%home%/arcad-dev.jks"
+		password="arcad-dev"
 		interval="300"/>		
 		
 	<partnerships classname="org.openas2.partner.XMLPartnershipFactory"
@@ -10,19 +10,15 @@
 	<loggers>
 		<logger classname="org.openas2.logging.ConsoleLogger"/>
 		
-		<!-- Remove this comment to enable emailing of exceptions
+		<!-- Remove this comment to enable emailing of exceptions-->
 		<logger classname="org.openas2.logging.EmailLogger"
-			show="terminated"
-			javax.mail.properties.file="%home%/java.mail.properties"
-			from="openas2"
-			to="your email address"
-			smtpserver="your smtp server"
-			smtpauth="true"
-			smtpuser="mySmtpUserId"
-			smtppwd="mySmtpPwd"
-			subject="$exception.name$: $exception.message$"
-			bodytemplate="%home%/emailtemplate.txt"/>
-		-->
+                        show="terminated"
+                        from="OpenAS2 STD"
+                        to="stefan.dawir@smals.be"
+                        smtpserver="smtp.smals-mvm.be"
+                        smtpauth="false"
+                        subject="OpenAS2 ERROR $exception.name$: $exception.message$"
+                        bodytemplate="%home%/emailtemplate.txt"/>
 		
 		<logger classname="org.openas2.logging.FileLogger"
 			filename="%home%/../logs/log-$date.MMddyyyy$.txt"/>			
@@ -62,6 +58,14 @@
 			format="sender.as2_id, receiver.as2_id, attributes.fileid"			
 			mimetype="application/EDI-X12" />
 
+		<module classname="org.openas2.processor.receiver.AS2DirectoryPollingModule"
+			outboxdir="%home%/../data/toARCADDEV/"
+			errordir="%home%/../data/toARCADDEV/error"			
+			interval="5"			
+			defaults="sender.as2_id=PORT-STD_OID, receiver.as2_id=ARCAD-DEV_OID"
+			sendfilename="true"
+			mimetype="application/EDI-X12"/>					
+		
 		<module classname="org.openas2.processor.receiver.AS2DirectoryPollingModule"
 			outboxdir="%home%/../data/toOpenAS2A/"
 			errordir="%home%/../data/toOpenAS2A/error"			
