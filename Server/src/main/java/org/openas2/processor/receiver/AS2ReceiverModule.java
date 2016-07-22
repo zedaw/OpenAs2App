@@ -6,44 +6,48 @@ import org.openas2.partner.AS2Partnership;
 
 
 public class AS2ReceiverModule extends NetModule {
-    //	Macros for responses
-    public static final String MSG_SENDER = "$" + MessageParameters.KEY_SENDER + "." +
-        AS2Partnership.PID_AS2 + "$";
-    public static final String MSG_RECEIVER = "$" + MessageParameters.KEY_RECEIVER + "." +
-        AS2Partnership.PID_AS2 + "$";
-    public static final String MSG_DATE = "$" + MessageParameters.KEY_HEADERS + ".date" + "$";
-    public static final String MSG_SUBJECT = "$" + MessageParameters.KEY_HEADERS + ".subject" + "$";
-    public static final String MSG_SOURCE_ADDRESS = "$" + MessageParameters.KEY_ATTRIBUTES + "." +
-        NetAttribute.MA_SOURCE_IP + "$";
-    public static final String DP_HEADER = "The message sent to Recipient " + MSG_RECEIVER +
-        " on " + MSG_DATE + " with Subject " + MSG_SUBJECT + " has been received, ";
-    public static final String DP_DECRYPTED = DP_HEADER +
-        "the EDI Interchange was successfully decrypted and it's integrity was verified. ";
-    public static final String DP_VERIFIED = DP_DECRYPTED +
-        "In addition, the sender of the message, Sender " + MSG_SENDER + " at Location " +
-        MSG_SOURCE_ADDRESS + " was authenticated as the originator of the message. ";
 
-    // Response texts    
-    public static final String DISP_PARTNERSHIP_NOT_FOUND = DP_HEADER + "but the Sender " +
-        MSG_SENDER + " and/or Recipient " + MSG_RECEIVER + " are unknown.";
-    public static final String DISP_PARSING_MIME_FAILED = DP_HEADER +
-        "but an error occured while parsing the MIME content.";
-    public static final String DISP_DECRYPTION_ERROR = DP_HEADER +
-        "but an error occured decrypting the content.";
-    public static final String DISP_DECOMPRESSION_ERROR = DP_HEADER +
-        "but an error occured decompressing the content.";
-    public static final String DISP_VERIFY_SIGNATURE_FAILED = DP_DECRYPTED +
-        "Authentication of the originator of the message failed.";
-    public static final String DISP_CALC_MIC_FAILED = DP_DECRYPTED +
-            "Calculation of the MIC for the message failed.";
-    public static final String DISP_STORAGE_FAILED = DP_VERIFIED +
-        " An error occured while storing the data to the file system.";
-    public static final String DISP_SUCCESS = DP_VERIFIED +
-        "There is no guarantee however that the EDI Interchange was syntactically correct, or was received by the EDI application/translator.";
-    
+    private static final String DOLLAR = "$";
+
+    private static final String DOT = ".";
+
+    // Macros for responses
+    public static final String MSG_SENDER = new StringBuilder(DOLLAR).append(MessageParameters.KEY_SENDER).append(DOT).append(AS2Partnership.PID_AS2).append(DOLLAR).toString();
+
+    public static final String MSG_RECEIVER = new StringBuilder(DOLLAR).append(MessageParameters.KEY_RECEIVER).append(DOT).append(AS2Partnership.PID_AS2).append(DOLLAR).toString();
+
+    public static final String MSG_DATE = new StringBuilder(DOLLAR).append(MessageParameters.KEY_HEADERS).append(DOT).append("date").append(DOLLAR).toString();
+
+    public static final String MSG_SUBJECT = new StringBuilder(DOLLAR).append(MessageParameters.KEY_HEADERS).append(DOT).append("subject").append(DOLLAR).toString();
+
+    public static final String MSG_SOURCE_ADDRESS = new StringBuilder(DOLLAR).append(MessageParameters.KEY_ATTRIBUTES).append(DOT).append(NetAttribute.MA_SOURCE_IP).append(DOLLAR).toString();
+
+    public static final String DP_HEADER = new StringBuilder("The message sent to Recipient ").append(MSG_RECEIVER).append(" on ").append(MSG_DATE).append(" with Subject ").append(MSG_SUBJECT).append(" has been received, ").toString();
+
+    public static final String DP_DECRYPTED = new StringBuilder(DP_HEADER).append("the EDI Interchange was successfully decrypted and it's integrity was verified. ").toString();
+
+    public static final String DP_VERIFIED = new StringBuilder(DP_DECRYPTED).append("In addition, the sender of the message, Sender ").append(MSG_SENDER).append(" at Location ").append(MSG_SOURCE_ADDRESS).append(" was authenticated as the originator of the message. ").toString();
+
+    // Response texts
+    public static final String DISP_PARTNERSHIP_NOT_FOUND = new StringBuilder(DP_HEADER).append("but the Sender ").append(MSG_SENDER).append(" and/or Recipient ").append(MSG_RECEIVER).append(" are unknown.").toString();
+
+    public static final String DISP_PARSING_MIME_FAILED = new StringBuilder(DP_HEADER).append("but an error occured while parsing the MIME content.").toString();
+
+    public static final String DISP_DECRYPTION_ERROR = new StringBuilder(DP_HEADER).append("but an error occured decrypting the content.").toString();
+
+    public static final String DISP_DECOMPRESSION_ERROR = new StringBuilder(DP_HEADER).append("but an error occured decompressing the content.").toString();
+
+    public static final String DISP_VERIFY_SIGNATURE_FAILED = new StringBuilder(DP_DECRYPTED).append("Authentication of the originator of the message failed.").toString();
+
+    public static final String DISP_CALC_MIC_FAILED = new StringBuilder(DP_DECRYPTED).append("Calculation of the MIC for the message failed.").toString();
+
+    public static final String DISP_STORAGE_FAILED = new StringBuilder(DP_VERIFIED).append(" An error occured while storing the data to the file system.").toString();
+
+    public static final String DISP_SUCCESS = new StringBuilder(DP_VERIFIED).append("There is no guarantee however that the EDI Interchange was syntactically correct, or was received by the EDI application/translator.").toString();
+
     protected NetModuleHandler getHandler() {
         return new AS2ReceiverHandler(this);
     }
 
- 
+
 }

@@ -55,7 +55,7 @@ public class IOUtilOld {
     }
 
     public static String getTransferRate(int bytes, ProfilerStub stub) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append(bytes).append(" bytes in ");
         buf.append(stub.getCombined()).append(" at ");
 
@@ -73,7 +73,7 @@ public class IOUtilOld {
     }
 
     public static String getTransferRate(long bytesPerSecond) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         long kbytesPerSecond = bytesPerSecond / 1024;
 
         if (bytesPerSecond < 1024) {

@@ -25,6 +25,7 @@
   
   
   <logger name="org.openas2" level="TRACE"/>
+  <logger name="sun.net.www.protocol.http.HttpURLConnection" level="ALL"/>
   
 
   <root level="debug">

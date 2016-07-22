@@ -16,8 +16,8 @@ import org.slf4j.LoggerFactory;
  */
 public class SysStreamLogger  {
 
-    private static Logger sysOutLogger = LoggerFactory.getLogger("SYSOUT");
-    private static Logger sysErrLogger = LoggerFactory.getLogger("SYSERR");
+    public static Logger sysOutLogger = LoggerFactory.getLogger("SYSOUT");
+    public static Logger sysErrLogger = LoggerFactory.getLogger("SYSERR");
 
     public static final PrintStream sysout = System.out;
     public static final PrintStream syserr = System.err;
@@ -35,7 +35,7 @@ public class SysStreamLogger  {
         System.setErr(syserr);
     }
 
-    private static class LoggingOutputStream extends java.io.OutputStream {
+    public static class LoggingOutputStream extends java.io.OutputStream {
 
         protected Logger log;
         protected boolean isError;
